@@ -3,6 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../lib/api";
 import queryClient from "../config/queryClient";
+import { socket } from "../lib/socket";
 
 
 const UserMenu = ({user}) => {
@@ -11,6 +12,8 @@ const UserMenu = ({user}) => {
     const {mutate: signOut} = useMutation({
         mutationFn: logout,
         onSettled: () => {
+            socket.emit("logout", user._id);
+            socket.disconnect();
             queryClient.clear();
             navigate('/login', {replace: true});
         }

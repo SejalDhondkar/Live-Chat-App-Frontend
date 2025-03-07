@@ -2,13 +2,13 @@ import { Box, Input, Button, VStack, HStack, Text, Spacer, Heading, Avatar } fro
 import { useState, useEffect, useRef } from "react";
 import useAllMessages from "../hooks/useMessages";
 import { getAllMessages, sendMessage } from "../lib/api";
-import { io } from "socket.io-client";
+import { socket } from "../lib/socket";
 import useAuth from "../hooks/useAuth";
 
 
-const socket = io("http://localhost:4000"); // Connect to backend
+ // Connect to backend
 
-const ChatBox = ({convoUser}) => {
+const ChatBox = ({convoUser, onlineUsers}) => {
     const {user} = useAuth();
     const userId = user._id;
 
@@ -49,17 +49,18 @@ const ChatBox = ({convoUser}) => {
     }
 
     useEffect(() => {
-        socket.emit("register", userId); // Register user on connection
+        socket.emit("register", userId);
     
         socket.on("receiveMessage", ({ senderId, message }) => {
             //console.log({ senderId, message})
             setMessages((prev) => [...prev, { senderId, message, recipientId: userId}]);
         });
     
-        return () => socket.off("receiveMessage");
+        return () => {
+            socket.off("receiveMessage");
+        }
       }, [userId]);
 
-    
 
       useEffect(() => {
         scrollToBottom()
@@ -83,6 +84,7 @@ const ChatBox = ({convoUser}) => {
             <HStack position="sticky" p={3} top="0" backgroundColor={'gray.900'}>
                 <Avatar size='sm' src={avatarUrl} name={convoUser.username} bg={'gray.600'} ></Avatar>
                 <Heading size={"sm"} >{convoUser.username}</Heading>
+                { onlineUsers.includes(convoUser._id) && <Text size={"xs"} color={"green"}> online </Text>}
             </HStack>
             <VStack p={2} spacing={3} align="stretch" overflowY="auto" flex={1}>
                 {messages.map((msg, index) => (

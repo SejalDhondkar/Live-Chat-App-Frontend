@@ -2,9 +2,8 @@ import { Card, CardHeader, Flex, Avatar, Box, Heading, Text, IconButton,AvatarBa
 
 // child
 
-const ChatCard = ({user, onCardClick}) => {
+const ChatCard = ({user, isOnline, onCardClick}) => {
     const avatarUrl = `https://api.dicebear.com/7.x/micah/svg?seed=${encodeURIComponent(user.username)}`;
-
 
     return (
         <Card maxW='md' backgroundColor='grey.800' onClick={()=>{onCardClick(user)}} p={1}>
@@ -12,6 +11,7 @@ const ChatCard = ({user, onCardClick}) => {
                 <Flex spacing='4'>
                 <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
                 <Avatar src={avatarUrl} name={user.username} bg={'gray.600'} >
+                    {isOnline && <AvatarBadge boxSize='0.9em' bg='green.500' />}
                 </Avatar>
 
                     <Box>

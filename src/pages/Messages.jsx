@@ -2,12 +2,26 @@ import ChatBox from "../components/ChatBox";
 import { Flex, Container, Heading, Input, HStack, Box } from "@chakra-ui/react";
 import ChatCard from "../components/ChatCard"
 import useAllUsers from "../hooks/useUsers"
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { socket } from "../lib/socket";
 
 const Messages = () => {
     const {users, isPending, isSuccess, isError} = useAllUsers();
 
     const [selectedUser, setSelectedUser] = useState(null);
+
+    const [onlineUsers, setOnlineUsers] = useState([]);
+
+    useEffect(() => {
+        socket.on("updateOnlineUsers", (users) => {
+            setOnlineUsers(users);
+            console.log(users);
+        });
+    
+        return () => {
+            socket.off("updateOnlineUsers");
+        }
+    }, []);
     
     const handleUserFromChild = (user) => {
         setSelectedUser(user);
@@ -35,14 +49,14 @@ const Messages = () => {
                     }>
                     {
                         users.map((user) => (
-                            <ChatCard key={user._id} user={user} onCardClick={handleUserFromChild} />
+                            <ChatCard key={user._id} user={user} isOnline={onlineUsers.includes(user._id)} onCardClick={handleUserFromChild} />
                         ))
                     }
                     </Box>
                 </Container>
                    
                 <Container  p='2' minW={'60%'}>
-                    {  selectedUser? <ChatBox convoUser={selectedUser}></ChatBox> : <Heading>Start Converstaions</Heading>}
+                    {  selectedUser? <ChatBox convoUser={selectedUser} onlineUsers={onlineUsers}></ChatBox> : <Heading>Start Converstaions</Heading>}
                 </Container>
             </Flex>
             
