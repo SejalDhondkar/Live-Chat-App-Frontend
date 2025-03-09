@@ -15,7 +15,6 @@ const Messages = () => {
     useEffect(() => {
         socket.on("updateOnlineUsers", (users) => {
             setOnlineUsers(users);
-            console.log(users);
         });
     
         return () => {
@@ -25,7 +24,6 @@ const Messages = () => {
     
     const handleUserFromChild = (user) => {
         setSelectedUser(user);
-        console.log('card clicked for '+ user.username);
     };
 
     return (

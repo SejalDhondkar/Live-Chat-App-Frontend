@@ -4,9 +4,7 @@ import useAllMessages from "../hooks/useMessages";
 import { getAllMessages, sendMessage } from "../lib/api";
 import { socket } from "../lib/socket";
 import useAuth from "../hooks/useAuth";
-
-
- // Connect to backend
+import { encryptMessage, decryptMessage } from "../lib/encrypt";
 
 const ChatBox = ({convoUser, onlineUsers}) => {
     const {user} = useAuth();
@@ -26,8 +24,15 @@ const ChatBox = ({convoUser, onlineUsers}) => {
     useEffect(()=>{
         const res = getAllMessages(convoUser.username);
         res.then(value => {
-            //console.log(value)
-            setMessages(value);
+            const msgs = value.map((v)=>({
+                senderId: v.senderId,
+                recipientId: v.recipientId,
+                message: decryptMessage(v.message, v.iv),
+                timestamp: v.timestamp,
+                isRead: v.isRead,
+                _id: v._id
+            }))
+            setMessages(msgs);
         })
     },[convoUser]);
 
@@ -35,15 +40,18 @@ const ChatBox = ({convoUser, onlineUsers}) => {
     //send message
 
     const handleSendMessage = (message) =>{
+        // encrypt the message
+        const {encryptedMessage, iv} = encryptMessage(message);
         const data = {
             recipientId: convoUser._id,
-            message: message
+            message: encryptedMessage,
+            iv: iv
         }
         const res = sendMessage(data);
         res.then(value => {
-            console.log(value);
-            socket.emit("privateMessage", { senderId: userId, receiverId: convoUser._id, message: value.message });
-            setMessages((prev) => [...prev, { senderId: userId, message, recipientId: convoUser._id }]);
+            socket.emit("privateMessage", { senderId: userId, receiverId: convoUser._id, encryptedMessage: value.message, iv: value.iv });
+            const decryptedMessage = decryptMessage(value.message, value.iv); 
+            setMessages((prev) => [...prev, { senderId: userId, message: decryptedMessage, recipientId: convoUser._id }]);
             setInput("");
         })
     }
@@ -51,9 +59,9 @@ const ChatBox = ({convoUser, onlineUsers}) => {
     useEffect(() => {
         socket.emit("register", userId);
     
-        socket.on("receiveMessage", ({ senderId, message }) => {
-            //console.log({ senderId, message})
-            setMessages((prev) => [...prev, { senderId, message, recipientId: userId}]);
+        socket.on("receiveMessage", ({ senderId, encryptedMessage, iv }) => {
+            const decryptedMessage = decryptMessage(encryptedMessage, iv)
+            setMessages((prev) => [...prev, { senderId, message: decryptedMessage, recipientId: userId}]);
         });
     
         return () => {
@@ -84,7 +92,7 @@ const ChatBox = ({convoUser, onlineUsers}) => {
             <HStack position="sticky" p={3} top="0" backgroundColor={'gray.900'}>
                 <Avatar size='sm' src={avatarUrl} name={convoUser.username} bg={'gray.600'} ></Avatar>
                 <Heading size={"sm"} >{convoUser.username}</Heading>
-                { onlineUsers.includes(convoUser._id) && <Text size={"xs"} color={"green"}> online </Text>}
+                { onlineUsers.includes(convoUser._id) && <Text size={"xs"} color={"teal.500"}> online </Text>}
             </HStack>
             <VStack p={2} spacing={3} align="stretch" overflowY="auto" flex={1}>
                 {messages.map((msg, index) => (
@@ -109,6 +117,8 @@ const ChatBox = ({convoUser, onlineUsers}) => {
         background={"gray.700"} rounded='100'
         value={input}
         onChange={(e) => setInput(e.target.value)}
+        borderColor={"teal.500"}
+        focusBorderColor = {"teal.500"}
         placeholder="Type a message..."
         onKeyDown={(e)=>{
             if(e.code === 'Enter') handleSendMessage(input);
