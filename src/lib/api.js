@@ -26,3 +26,5 @@ export const getAllMessages = async(username) => API.get(`/user/messages/${usern
 export const sendMessage = async(data) => API.post('/user/messages',data);
 
 export const checkUsername = async(data) => API.post('/auth/check',data);
+
+export const searchUser = async(data) => API.post('/user/search',data);

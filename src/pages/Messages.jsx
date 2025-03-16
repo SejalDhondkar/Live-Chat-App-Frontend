@@ -4,15 +4,30 @@ import ChatCard from "../components/ChatCard"
 import useAllUsers from "../hooks/useUsers"
 import { useState, useEffect } from "react";
 import { socket } from "../lib/socket";
+import { getAllUsers, searchUser } from "../lib/api";
 
 const Messages = () => {
-    const {users, isPending, isSuccess, isError} = useAllUsers();
+    const [users, setUsers] = useState([]);
 
     const [selectedUser, setSelectedUser] = useState(null);
 
     const [onlineUsers, setOnlineUsers] = useState([]);
 
+    const [search, setSearch] = useState('');
+
+    const searchUsernameOrEmail = (searchQuery) =>{
+        const res = searchUser({search:searchQuery});
+        res.then(value=>{
+            setUsers(value);
+        })
+    }
+
     useEffect(() => {
+        const res = getAllUsers();
+        res.then(value=>{
+            setUsers(value);
+        })
+        
         socket.on("updateOnlineUsers", (users) => {
             setOnlineUsers(users);
         });
@@ -30,7 +45,13 @@ const Messages = () => {
         <>
         <HStack>
             <Heading width='40%' m={4}>Chat Room</Heading>
-            <Input background={"gray.700"} rounded='100' width='30%' placeholder="Search User"></Input>
+            <Input background={"gray.700"} 
+                rounded='100' 
+                width='30%' 
+                placeholder="Search User"
+                value={search}
+                onChange={(e)=> {setSearch(e.target.value); searchUsernameOrEmail(e.target.value)}}
+                ></Input>
         </HStack>
         
         <Flex alignContent={"center"}>
