@@ -1,5 +1,5 @@
 import ChatBox from "../components/ChatBox";
-import { Flex, Container, Heading, Input, HStack, Box } from "@chakra-ui/react";
+import { Flex, Container, Heading, Input, HStack, Box, Center } from "@chakra-ui/react";
 import ChatCard from "../components/ChatCard"
 import useAllUsers from "../hooks/useUsers"
 import { useState, useEffect } from "react";
@@ -29,7 +29,7 @@ const Messages = () => {
     return (
         <>
         <HStack>
-            <Heading width='40%' m={4}>Recent Chats</Heading>
+            <Heading width='40%' m={4}>Chat Room</Heading>
             <Input background={"gray.700"} rounded='100' width='30%' placeholder="Search User"></Input>
         </HStack>
         
@@ -54,7 +54,7 @@ const Messages = () => {
                 </Container>
                    
                 <Container  p='2' minW={'60%'}>
-                    {  selectedUser? <ChatBox convoUser={selectedUser} onlineUsers={onlineUsers}></ChatBox> : <Heading>Start Converstaions</Heading>}
+                    {  selectedUser? <ChatBox convoUser={selectedUser} onlineUsers={onlineUsers}></ChatBox> : <Center><Heading>Start Conversations</Heading></Center> }
                 </Container>
             </Flex>
             

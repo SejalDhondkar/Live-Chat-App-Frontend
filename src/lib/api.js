@@ -24,3 +24,5 @@ export const deleteSession = async (id) => API.delete(`/sessions/${id}`);
 export const getAllMessages = async(username) => API.get(`/user/messages/${username}`);
 
 export const sendMessage = async(data) => API.post('/user/messages',data);
+
+export const checkUsername = async(data) => API.post('/auth/check',data);

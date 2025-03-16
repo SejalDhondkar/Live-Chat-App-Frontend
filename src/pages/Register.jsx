@@ -9,19 +9,30 @@ import {
     Stack,
     Link as ChakraLink,
     Button,
-    Text
+    Text,
+    FormErrorMessage
 } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { register } from '../lib/api';
+import { register,checkUsername } from '../lib/api';
 
 const Register = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [checkMessage, setCheckMessage] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
+    const checkUsernameHandler = () => {
+        setCheckMessage('')
+        if(!username) return;
+        const res = checkUsername({username});
+        res.then(value=>{
+            setCheckMessage(value.message);
+        })
+}
     const {
         mutate: createAccount,
         isPending,
@@ -60,6 +71,20 @@ const Register = () => {
                             onChange={(e)=> setEmail(e.target.value)}
                             />
                         </FormControl>
+                        <FormControl id='username'>
+                            <FormLabel>Username</FormLabel>
+                            <Input
+                            value={username}
+                            onBlur={checkUsernameHandler}
+                            onChange={(e)=> { setCheckMessage(''); setUsername(e.target.value)}}
+                            />
+                            
+                            { checkMessage &&
+                                <Text color='text.muted' fontSize='xs' textAlign='left' mt={2}>
+                                {checkMessage}
+                            </Text>
+                            }
+                        </FormControl>
                         <FormControl id='password'>
                             <FormLabel>Password</FormLabel>
                             <Input type='password' 
@@ -79,10 +104,10 @@ const Register = () => {
                                 (e) => e.key === 'Enter' && createAccount({ email, password, confirmPassword })
                             }
                             />
-                            <Button my={2} isDisabled={!email || password.length<6 || password !== confirmPassword}
+                            <Button my={2} isDisabled={!email || password.length<6 || password !== confirmPassword || checkMessage!=='Username is available'}
                             isLoading={isPending}
                             onClick={
-                                ()=> createAccount({ email, password, confirmPassword })
+                                ()=> createAccount({ email, username ,password, confirmPassword })
                             }
                             >
                                 Create Account
