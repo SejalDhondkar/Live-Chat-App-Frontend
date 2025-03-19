@@ -1,0 +1,1 @@
+export const AVATAR_BASE_URL = 'https://api.dicebear.com/9.x/adventurer/svg?flip=true&scale=110&seed='

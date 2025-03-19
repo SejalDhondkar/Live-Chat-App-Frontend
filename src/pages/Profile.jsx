@@ -1,13 +1,14 @@
-import { Alert, AlertIcon, Center, Heading, Text, Stack, Button, Avatar} from "@chakra-ui/react";
+import { Center, Heading, Text, Stack, Button, Avatar} from "@chakra-ui/react";
 import { ChatIcon, EditIcon } from '@chakra-ui/icons'
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import { AVATAR_BASE_URL } from "../lib/avatar";
 
 const Profile = () => {
     const {user} = useAuth();
     const {email, verified, createdAt, username} = user;
     const navigate = useNavigate();
-    const avatarUrl = `https://api.dicebear.com/7.x/micah/svg?seed=${encodeURIComponent(username)}`;
+    const avatarUrl = AVATAR_BASE_URL + encodeURIComponent(username);
 
     return (
         <Center my={16} flexDir={"column"}>
@@ -20,7 +21,7 @@ const Profile = () => {
                 //     </Alert>
                 // )
             }
-            <Avatar bg={"gray.600"} src={`https://api.dicebear.com/7.x/micah/svg?seed=${encodeURIComponent(username)}`} size={"xl"} m={"20px"}/>
+            <Avatar bg={"gray.600"} src={avatarUrl} size={"xl"} m={"20px"}/>
 
             <Text color='white' mb={2}>
                 Hello!!{" "} 

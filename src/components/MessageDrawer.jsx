@@ -1,6 +1,5 @@
-import { Box, Container , useDisclosure,Divider } from "@chakra-ui/react"
+import { Box } from "@chakra-ui/react"
 import React from "react"
-import { Flex, Spacer, Heading } from "@chakra-ui/react"
 import ChatCard from "./ChatCard"
 import useAllUsers from "../hooks/useUsers"
 import { useState } from "react";
@@ -9,14 +8,12 @@ import { useState } from "react";
 
 const MessagesDrawer = () => {
 
-    const {users, isPending, isSuccess, isError} = useAllUsers();
+    const {users} = useAllUsers();
 
     const [selectedUser, setSelectedUser] = useState(null);
     
     const handleUserFromChild = (user) => {
         setSelectedUser(user);
-        console.log(user);
-        console.log('card clicked for '+ user.username);
     };
 
     return (

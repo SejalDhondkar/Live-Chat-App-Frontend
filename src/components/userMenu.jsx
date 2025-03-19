@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { logout } from "../lib/api";
 import queryClient from "../config/queryClient";
 import { socket } from "../lib/socket";
+import { AVATAR_BASE_URL } from "../lib/avatar";
 
 
 const UserMenu = ({user}) => {
@@ -19,7 +20,7 @@ const UserMenu = ({user}) => {
         }
     })
 
-    const avatarUrl = `https://api.dicebear.com/7.x/micah/svg?seed=${encodeURIComponent(user.username)}`;
+    const avatarUrl = AVATAR_BASE_URL + encodeURIComponent(user.username);
 
     return (
         <Menu isLazy placement="top-end">

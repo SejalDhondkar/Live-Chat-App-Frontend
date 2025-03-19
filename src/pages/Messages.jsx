@@ -1,7 +1,6 @@
 import ChatBox from "../components/ChatBox";
 import { Flex, Container, Heading, Input, HStack, Box, Center } from "@chakra-ui/react";
 import ChatCard from "../components/ChatCard"
-import useAllUsers from "../hooks/useUsers"
 import { useState, useEffect } from "react";
 import { socket } from "../lib/socket";
 import { getAllUsers, searchUser } from "../lib/api";

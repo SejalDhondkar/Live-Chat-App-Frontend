@@ -1,9 +1,10 @@
 import { Card, CardHeader, Flex, Avatar, Box, Heading, Text, IconButton,AvatarBadge, Image } from '@chakra-ui/react'
+import { AVATAR_BASE_URL } from '../lib/avatar';
 
 // child
 
 const ChatCard = ({user, isOnline, onCardClick}) => {
-    const avatarUrl = `https://api.dicebear.com/7.x/micah/svg?seed=${encodeURIComponent(user.username)}`;
+    const avatarUrl = AVATAR_BASE_URL + encodeURIComponent(user.username);
 
     return (
         <Card maxW='md' backgroundColor='grey.800' onClick={()=>{onCardClick(user)}} p={1}>

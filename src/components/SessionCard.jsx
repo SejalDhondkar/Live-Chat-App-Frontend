@@ -2,7 +2,6 @@ import { Box, Flex, Text, Button } from "@chakra-ui/react";
 import useDeleteSession from "../hooks/useDeleteSession";
 
 const SessionCard = ({session}) => {
-    console.log(session);
     const { _id, createdAt, userAgent, isCurrent} = session
 
     const { deleteSession, isPending } = useDeleteSession(_id);

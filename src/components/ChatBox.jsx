@@ -5,6 +5,7 @@ import { getAllMessages, sendMessage } from "../lib/api";
 import { socket } from "../lib/socket";
 import useAuth from "../hooks/useAuth";
 import { encryptMessage, decryptMessage } from "../lib/encrypt";
+import { AVATAR_BASE_URL } from "../lib/avatar";
 
 const ChatBox = ({convoUser, onlineUsers}) => {
     const {user} = useAuth();
@@ -18,7 +19,7 @@ const ChatBox = ({convoUser, onlineUsers}) => {
         messagesEndRef.current?.scrollIntoView({ behaviour: "instant"})
     }
 
-    const avatarUrl = `https://api.dicebear.com/7.x/micah/svg?seed=${encodeURIComponent(convoUser.username)}`;
+    const avatarUrl = AVATAR_BASE_URL + encodeURIComponent(convoUser.username);
     
     // set messages
     useEffect(()=>{
