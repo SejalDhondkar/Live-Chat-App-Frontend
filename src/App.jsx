@@ -5,7 +5,6 @@ import VerifyEmail from './pages/VerifyEmail';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from "./pages/ResetPassword";
 import AppContainer from "./components/AppContainer";
-import AuthContainer from "./components/AuthContainer";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import { setNavigate } from "./lib/setNavigate";
@@ -22,13 +21,11 @@ function App() {
       <Route path='/settings' element={<Settings />}/>
       <Route path='/messages' element={<Messages />}/>
     </Route>
-    <Route path='/' element={<AuthContainer  />} >
-    <Route index path='/login' element={<Login/>} />
+    <Route path='/login' element={<Login/>} />
     <Route path='/register' element={<Register/>} />
     <Route path='/email/verify/:code' element={<VerifyEmail/>} />
     <Route path='/password/forgot' element={<ForgotPassword/>} />
     <Route path='/password/reset' element={<ResetPassword/>} />
-    </Route>
    </Routes>
    );
 };
