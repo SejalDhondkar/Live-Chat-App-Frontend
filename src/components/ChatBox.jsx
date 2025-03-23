@@ -1,6 +1,5 @@
 import { Box, Input, Button, VStack, HStack, Text, Spacer, Heading, Avatar } from "@chakra-ui/react"
 import { useState, useEffect, useRef } from "react";
-import useAllMessages from "../hooks/useMessages";
 import { getAllMessages, sendMessage } from "../lib/api";
 import { socket } from "../lib/socket";
 import useAuth from "../hooks/useAuth";

@@ -39,9 +39,9 @@ const Profile = () => {
                 <Button leftIcon={<ChatIcon />} colorScheme='teal' variant='solid' onClick={()=> navigate('/messages')}>
                     Go to Messages
                 </Button>
-                <Button rightIcon={<EditIcon />} colorScheme='teal' variant='outline'>
+                {/* <Button rightIcon={<EditIcon />} colorScheme='teal' variant='outline'>
                     Create New Group
-                </Button>
+                </Button> */}
                 </Stack>
         </Center>
     )

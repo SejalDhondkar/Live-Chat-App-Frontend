@@ -10,12 +10,14 @@ import {
     Link as ChakraLink,
     Button,
     Text,
-    FormErrorMessage
+    FormErrorMessage,
+    Avatar
 } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { register,checkUsername } from '../lib/api';
+import { AVATAR_BASE_URL } from '../lib/avatar';
 
 const Register = () => {
     const navigate = useNavigate();
@@ -47,12 +49,18 @@ const Register = () => {
         }
     })
 
+    const avatarUrl = AVATAR_BASE_URL + encodeURIComponent(username);
+
     return (
         <Flex minH='100vh' align='center' justify='center'>
             <Container mx='auto' maxW='md' py={12} px={6} textAlign='center'>
             <Heading fontSize='4xl' mb={8}>
                     Create your account
                 </Heading>
+                <Avatar bg={"gray.600"} src={avatarUrl} size={"2xl"} m={"10px"}/>
+                <Text color='text.muted' fontSize='xs' textAlign='center' mb={10}>
+                                Customize your Avatar with username
+                            </Text>
                 <Box rounded='lg' bg='gray.700' boxShadow='lg' p={8}>
                     {
                         isError && (
