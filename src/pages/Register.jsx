@@ -109,7 +109,7 @@ const Register = () => {
                             value={confirmPassword}
                             onChange={(e)=> setConfirmPassword(e.target.value)}
                             onKeyDown={
-                                (e) => e.key === 'Enter' && createAccount({ email, password, confirmPassword })
+                                (e) => e.key === 'Enter' && createAccount({ email,username, password, confirmPassword })
                             }
                             />
                             <Button my={2} isDisabled={!email || password.length<6 || password !== confirmPassword || checkMessage!=='Username is available'}
