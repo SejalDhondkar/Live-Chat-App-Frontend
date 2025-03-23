@@ -41,6 +41,9 @@ const ChatBox = ({convoUser, onlineUsers}) => {
     //send message
 
     const handleSendMessage = (message) =>{
+        if(!message){
+            return;
+        }
         // encrypt the message
         const {encryptedMessage, iv} = encryptMessage(message);
         const data = {
